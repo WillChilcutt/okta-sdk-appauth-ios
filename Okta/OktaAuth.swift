@@ -133,20 +133,20 @@ public struct OktaAuthorization {
     // In the Future, when AppAuth supports the end session endpoint, this method will not be necessary anymore.
     func logoutFlow(_ config: [String: Any], view:UIViewController, callback: @escaping (OktaError?) -> Void) -> Any? {
         
-        let configuration = OktaAuth.tokens?.authState?.lastAuthorizationResponse.request.configuration
+        let configuration = OktaAuth.tokens?.authState.lastAuthorizationResponse.request.configuration
         
         guard let endSessionEndpoint = configuration?.discoveryDocument?.discoveryDictionary["end_session_endpoint"] as? String else {
-            callback(.apiError(error: "Error: failed to find the end session endpoint."))
+            callback(.APIError(error: "Error: failed to find the end session endpoint."))
             return nil
         }
         
         guard var endSessionURLComponents = URLComponents(string: endSessionEndpoint) else {
-            callback(.apiError(error: "Error: Unable to parse End Session Endpoint"))
+            callback(.APIError(error: "Error: Unable to parse End Session Endpoint"))
             return nil
         }
         
         guard let idToken = OktaAuth.tokens?.idToken else {
-            callback(.apiError(error: "Error: Unable to get a valid ID Token"))
+            callback(.APIError(error: "Error: Unable to get a valid ID Token"))
             return nil
         }
         
@@ -160,7 +160,7 @@ public struct OktaAuthorization {
         endSessionURLComponents.queryItems = queryItems
         
         guard let url = endSessionURLComponents.url else {
-            callback(.apiError(error: "Error: Unable to set End Session Endpoint parameters"))
+            callback(.APIError(error: "Error: Unable to set End Session Endpoint parameters"))
             return nil
         }
         var logoutController:Any?
