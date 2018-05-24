@@ -136,17 +136,17 @@ public struct OktaAuthorization {
         let configuration = OktaAuth.tokens?.authState.lastAuthorizationResponse.request.configuration
         
         guard let endSessionEndpoint = configuration?.discoveryDocument?.discoveryDictionary["end_session_endpoint"] as? String else {
-            callback(.APIError(error: "Error: failed to find the end session endpoint."))
+            callback(.APIError("Error: failed to find the end session endpoint."))
             return nil
         }
         
         guard var endSessionURLComponents = URLComponents(string: endSessionEndpoint) else {
-            callback(.APIError(error: "Error: Unable to parse End Session Endpoint"))
+            callback(.APIError("Error: Unable to parse End Session Endpoint"))
             return nil
         }
         
         guard let idToken = OktaAuth.tokens?.idToken else {
-            callback(.APIError(error: "Error: Unable to get a valid ID Token"))
+            callback(.APIError("Error: Unable to get a valid ID Token"))
             return nil
         }
         
@@ -160,7 +160,7 @@ public struct OktaAuthorization {
         endSessionURLComponents.queryItems = queryItems
         
         guard let url = endSessionURLComponents.url else {
-            callback(.APIError(error: "Error: Unable to set End Session Endpoint parameters"))
+            callback(.APIError("Error: Unable to set End Session Endpoint parameters"))
             return nil
         }
         var logoutController:Any?
