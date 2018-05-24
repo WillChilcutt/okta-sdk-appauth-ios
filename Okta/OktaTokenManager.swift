@@ -137,7 +137,8 @@ open class OktaTokenManager: NSObject, NSCoding {
             throw error
         }
         return false
-
+    }
+    
         public func set(value: String, forKey: String, needsBackgroundAccess: Bool) {
         var accessibility = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
         if needsBackgroundAccess {
@@ -172,3 +173,4 @@ open class OktaTokenManager: NSObject, NSCoding {
         OktaAuth.tokens = nil
     }
 
+}
