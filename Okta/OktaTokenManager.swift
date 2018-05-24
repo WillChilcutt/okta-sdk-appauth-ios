@@ -118,6 +118,7 @@ open class OktaTokenManager: NSObject, NSCoding {
         )
     }
 
+
     public func encode(with coder: NSCoder) {
         coder.encode(self.authState, forKey: "authState")
         coder.encode(self.config, forKey: "config")
@@ -136,10 +137,38 @@ open class OktaTokenManager: NSObject, NSCoding {
             throw error
         }
         return false
+
+        public func set(value: String, forKey: String, needsBackgroundAccess: Bool) {
+        var accessibility = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+        if needsBackgroundAccess {
+            // If the device needs background keychain access, grant permission
+            accessibility = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        }
+
+        do {
+            try Vinculum.set(key: forKey, value: value, accessibility: accessibility)
+        } catch let error {
+            // Log the error until this method is updated to throw
+            print(error.localizedDescription)
+        }
+    }
+
+    public func get(forKey: String) -> String? {
+        // Attempt to return the string value of the stored key
+        do {
+            if let keychainItem =  try Vinculum.get(forKey) {
+                return keychainItem.getString()
+            }
+        } catch let error {
+            // Log the error until this method is updated to throw
+            print(error.localizedDescription)
+        }
+        return nil
+        
     }
 
     public func clear() {
         Vinculum.removeAll()
         OktaAuth.tokens = nil
     }
-}
+
