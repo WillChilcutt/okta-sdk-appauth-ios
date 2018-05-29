@@ -2,6 +2,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 def shared_pods
+    pod 'AppAuth', :git => 'https://github.com/WillChilcutt/AppAuth-iOS.git', :tag => '0.93.0'
     pod 'OktaAuth', :path => '../'
     pod 'Vinculum'
 end
